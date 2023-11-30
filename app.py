@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -7,18 +7,18 @@ def form():
     return render_template('index.html')
 
 @app.route('/', methods=['POST'])
-def submit():
+def submit_form():
     if request.method == 'POST':
         make = request.form['make']
         model = request.form['model']
         year = request.form['year']
-        color = request.form['color']
-        return redirect(url_for('built', make=make, model=model, year=year, color=color))
+        description = request.form['description']
+        return redirect(url_for('submit', make=make, model=model, year=year, description=description))
 
 @app.route('/built')
-def built():
-    make = request.args.get('make', default='mazda', type=str)
-    model = request.args.get('model', default='miata', type=str)
-    year = request.args.get('year', default=2007, type=int)
-    color = request.args.get('color', default='blue', type=str)
-    return "New Car!! A {color} {year} {make} {model}!".format(make=make, model=model, year=year, color=color)
+def submit():
+    make = request.args.get('make')
+    model = request.args.get('model')
+    year = request.args.get('year')
+    description = request.args.get('description')
+    return render_template('built.html', make=make, model=model, year=year, description=description)
