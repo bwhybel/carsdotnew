@@ -12,7 +12,13 @@ def submit():
         make = request.form['make']
         model = request.form['model']
         year = request.form['year']
-        description = request.form['description']
-        # Here you can handle the data. For example, store it in a database.
-        print(f'{make} {model} {year} {description}')
-        return 'Created a new car listing!'
+        color = request.form['color']
+        return redirect(url_for('built', make=make, model=model, year=year, color=color))
+
+@app.route('/built')
+def built():
+    make = request.args.get('make', default='mazda', type=str)
+    model = request.args.get('model', default='miata', type=str)
+    year = request.args.get('year', default=2007, type=int)
+    color = request.args.get('color', default='blue', type=str)
+    return "New Car!! A {color} {year} {make} {model}!".format(make=make, model=model, year=year, color=color)
